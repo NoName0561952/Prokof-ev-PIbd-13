@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//Очередь на односвязном списке Прокофьев Егор ПИбд-13
+
+// Узел связанного списка
+struct Node
+{
+    int data;               // целочисленные данные
+    struct Node* next;      // указатель на следующий узел
+}*rear = NULL, * front = NULL;
+
+// Вспомогательная функция для выделения нового узла queue
+struct Node* newNode(int item)
+{
+    // выделяем новый узел в куче
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+
+    // проверяем, заполнена ли queue (куча). Тогда вставка элемента будет
+    // привести к переполнению кучи
+    if (node != NULL)
+    {
+        // устанавливаем данные в выделенном узле и возвращаем их
+        node->data = item;
+        node->next = NULL;
+        return node;
+    }
+    else {
+        printf("\nHeap Overflow");
+        exit(EXIT_FAILURE);
+    }
+}
+
+//void Print()
+//{
+//    Node* temp = front;
+//    while (temp)
+//    {
+//        printf(temp->data,  "  ");
+//        front = front->next;
+//    }
+//}
+
+// Вспомогательная функция для удаления переднего элемента из очереди
+int pop()        // удалить в начале
+{
+    if (front == NULL)
+    {
+        printf("\nQueue Underflow");
+        exit(EXIT_FAILURE);
+    }
+
+    struct Node* temp = front;
+    printf("Deleting %d\n", temp->data);
+
+    // продвигаемся вперед к следующему узлу
+    front = front->next;
+
+    // если список станет пустым
+    if (front == NULL) {
+        rear = NULL;
+    }
+
+    // освобождаем память удаленного узла и при необходимости возвращаем удаленный элемент
+    int item = temp->data;
+    free(temp);
+    return item;
+}
+
+// Вспомогательная функция для добавления элемента в queue
+void push(int item)        // вставка в конце
+{
+    // выделяем новый узел в куче
+    struct Node* node = newNode(item);
+    printf("%d", item);
+    printf("->");
+    
+    
+    
+
+    // особый случай: queue пуста
+    if (front == NULL)
+    {
+        // инициализируем и переднюю, и заднюю часть
+        front = node;
+        rear = node;
+    }
+    else {
+        // обновить заднюю часть
+        rear->next = node;
+        rear = node;
+    }
+}
+
+// Вспомогательная функция для возврата верхнего элемента в queue
+int peek()
+{
+    // проверяем наличие пустой queue
+    if (front != NULL) {
+        return front->data;
+    }
+    else {
+        exit(EXIT_FAILURE);
+    }
+}
+
+// Вспомогательная функция для проверки, пуста ли queue или нет
+int isEmpty() {
+    return rear == NULL && front == NULL;
+}
+
+int main()
+{
+    push(1);
+    push(2);
+    push(3);
+    push(4);
+    printf("\n");
+
+    printf("The front element is %d\n", peek());
+    printf("\n");
+
+    pop();
+    pop();
+    pop();
+    pop();
+
+    if (isEmpty()) {
+        printf("The queue is empty");
+    }
+    else {
+        printf("The queue is not empty");
+    }
+
+    return 0;
+}
